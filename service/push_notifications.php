@@ -2,10 +2,12 @@
     define("ANDROID_DEVICE", 1);
     define("IOS_DEVICE", 2);
     define("WIN10_DEVICE", 3);
+
     require_once('config.php');
-    require_once('functions.php');
     require_once("logger.php");
+    require_once("enums.php");
     require_once("database.php");
+    require_once("session.php");
 
     function sendPushNotification($titolo,$corpo,$autore,$id_news,$devices)
     {
@@ -15,8 +17,8 @@
         $anteprima = $corpo; //TODO tagliare il corpo della news
         
         sendPush_Android($id_news, $titolo, $anteprima, $autore, GetTokenArray($dev_android));
-        //sendPush_iOS($titolo, $anteprima, $autore, $id_news, $dev_ios);
-        //sendPush_Windows($titolo, $anteprima, $autore, $id_news, $dev_win10);
+        sendPush_iOS($titolo, $anteprima, $autore, $id_news, $dev_ios);
+        sendPush_Windows($titolo, $anteprima, $autore, $id_news, $dev_win10);
     }
     function GetTokenArray($array)
     {
@@ -83,28 +85,22 @@
         $registrationIds = GetAllDevices();
         sendPushNotification($titolo, $testo, $autore,$id_news, $registrationIds);
     }
-    /*
+    
     function GetAllDevices()
     {
-        $query = "SELECT id_utente,token,deviceOS FROM push_devices";
-        $result = array();
-        $dbConn = dbConnect();
-        if($st = $dbConn->prepare($query))
-        {
-            if($st->execute())
-            {
-                $st->bind_result($idUtente,$token,$deviceOS);
-                while($st->fetch())
-                {
-                    $device = array("user"=>$idUtente, "token"=>$token,"deviceOS"=>$deviceOS);
-                    array_push($result, $device);
-                }
-            }
-            $st->close();
-        }
-        dbClose($dbConn);
-        return $result;
+        $query = "SELECT id_utente as user,token,deviceOS FROM push_devices";
+        return dbSelect($query);
     }
-    */
-    //SendNotificationAllUsers("Test push notifications","E' solo un test'","PostAppDeveloper",0);
+    function RegistraDevice($token, $device, $deviceId)
+	{
+		$idUtente = getIdUtenteFromSession();
+		$query = "INSERT INTO push_devices (id_utente,token,deviceOS,deviceId) VALUES (?,?,?,?)";
+		return dbUpdate($query,"isis",array($idUtente,$token,$device,$deviceId)) ? StatusCodes::OK : StatusCodes::FAIL;
+	}
+    function UnRegistraDevice($token, $device,$deviceId)
+	{
+		$idUtente = getIdUtenteFromSession();
+		$query = "DELETE FROM push_devices WHERE id_utente=? AND token=? AND deviceOS=? AND deviceId = ?";
+		return dbUpdate($query,"isis",array($idUtente,$token,$device,$deviceId), DatabaseReturns::RETURN_AFFECTED_ROWS) ? StatusCodes::OK : StatusCodes::FAIL;
+	}
 ?>

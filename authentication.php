@@ -1,9 +1,12 @@
 <?php
     session_start();
     
+	require_once("connections.php");
+	require_once("database.php");
     require_once("enums.php");
     require_once("functions.php");
-	require_once("database.php");
+	require_once("push_notifications.php");
+	require_once("session.php");
     
     $action = getParameter("action", true);
     $responseCode = StatusCodes::FAIL;
@@ -41,16 +44,4 @@
     }
     sendResponse($responseCode, $responseContent);
     
-	function RegistraDevice($token, $device, $deviceId)
-	{
-		$idUtente = getIdUtenteFromSession();
-		$query = "INSERT INTO push_devices (id_utente,token,deviceOS,deviceId) VALUES (?,?,?,?)";
-		return dbUpdate($query,"isis",array($idUtente,$token,$device,$deviceId)) ? StatusCodes::OK : StatusCodes::FAIL;
-	}
-	function UnRegistraDevice($token, $device,$deviceId)
-	{
-		$idUtente = getIdUtenteFromSession();
-		$query = "DELETE FROM push_devices WHERE id_utente=? AND token=? AND deviceOS=? AND deviceId = ?";
-		return dbUpdate($query,"isis",array($idUtente,$token,$device,$deviceId), DatabaseReturns::RETURN_AFFECTED_ROWS) ? StatusCodes::OK : StatusCodes::FAIL;
-	}
 ?>

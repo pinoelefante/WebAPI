@@ -2,102 +2,7 @@
     require_once("config.php");
     require_once("enums.php");
     require_once("logger.php");
-
-    $requestId = LogRequest();
-    checkUserAgent();
-
-    function isLogged($required = false)
-    {
-        $sessionVer = sessionVerification();
-        if($required && !$sessionVer)
-        {
-            sendResponse(StatusCodes::LOGIN_NON_LOGGATO, "");
-            exit;
-        }
-        return $sessionVer;
-    }
-    function getIdUtenteFromSession($failIfNotLogged = true)
-    {
-        if(isset($_SESSION["idUtente"]))
-            return $_SESSION["idUtente"];
-            
-        if($failIfNotLogged)
-        {
-            sendResponse(StatusCodes::LOGIN_NON_LOGGATO, "");
-            die();
-        }
-        return -1; //utente non loggato
-    }
-    function getParameter($par,$required = false)
-    {
-        if(isset($_POST[$par]) && !empty($_POST[$par]))
-            return $_POST[$par];
-        else if(isset($_GET[$par]) && !empty($_GET[$par]))
-            return $_GET[$par];
-        if($required)
-        {
-            sendResponse(StatusCodes::RICHIESTA_MALFORMATA, "$par is required");
-            $action = getParameter("action");
-            //$debug = GetDebugMessage();
-            //$corpoMail = "Il server ha ricevuto una richiesta malformata. Ecco la richiesta:\n\n<br><br>$debug";
-            //sendEmailAdmin("Richiesta malformata - action = $action",$corpoMail);
-            die();
-        }
-        return NULL;
-    }
-    function sendResponse($response, $content = "")
-    {
-        $array = array('response' => $response, 
-                       'time' => date("Y-m-d H:i:s"),
-                       'content' => empty($content) ? "" : $content );
-        header('Content-Type: application/json');
-        $responseJson = json_encode($array);
-        LogResponse($responseJson, $GLOBALS['requestId']);
-        echo $responseJson;
-
-        if($response<0)
-        {
-            $debug = GetDebugMessage();
-            $corpoMail = "E' stata rilevata una richiesta fallita al server ($response). Ecco la richiesta\n\n<br><br>$debug";
-            sendEmailAdmin("[PostApp] Richiesta fallita",$corpoMail);
-        }
-    }
-    function sendPOSTRequest($url, $data)
-    {
-        //$url = 'http://server.com/path';
-        //$data = array('key1' => 'value1', 'key2' => 'value2');
-
-        // use key 'http' even if you send the request to https://...
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method'  => 'POST',
-                'content' => http_build_query($data)
-            )
-        );
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        if ($result === FALSE) 
-        { 
-            /* Handle error */ 
-        }
-
-        var_dump($result);
-    }
-    function sendEmail($destinatario, $oggetto, $corpo)
-    {
-        //mail($destinatario, $oggetto, $corpo);
-    }
-    function sendEmailAdmin($oggetto, $corpo)
-    {
-        //mail(ADMIN_EMAIL, $oggetto, $corpo);
-    }
-    function sessionVerification()
-    {
-        if(isset($_SESSION["idUtente"]) &&!empty($_SESSION["idUtente"]))
-            return true;
-        return false;
-    }
+    
     //ritorna percorso salvataggio immagine
     function SalvaImmagine($immagineBytes, $folder = "images")
     {
@@ -213,11 +118,7 @@
         while(file_exists($folder."/".$filename));
 		return $filename;
 	}
-    function hashPassword($password)
-    {
-        $options = array('cost' => HASH_COST_TIME);
-        return password_hash($password, PASSWORD_BCRYPT, $options);
-    }
+    
     function costTimeHashPassword($timeTarget = 0.05 /*50ms*/)
     {
         if($timeTarget == NULL)
@@ -241,16 +142,5 @@
     {
         $code = uniqid($prefix, false).$appendix;
         return $code;
-    }
-    function checkUserAgent()
-    {
-        if(CHECK_USER_AGENT)
-        {
-            if($_SERVER['HTTP_USER_AGENT']=="PostAppClient")
-                return true;
-            sendResponse(StatusCodes::INVALID_CLIENT);
-            exit();
-        }
-        return true;
     }
 ?>

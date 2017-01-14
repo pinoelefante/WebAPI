@@ -2,7 +2,6 @@
     require_once("config.php");
     require_once("enums.php");
     require_once("logger.php");
-    require_once("functions.php");
 
     function dbConnect()
     {
@@ -86,4 +85,9 @@
 			$refs[$key] = &$arr[$key]; 
 		return $refs;
 	}
+    function hashPassword($password)
+    {
+        $options = array('cost' => HASH_COST_TIME);
+        return password_hash($password, PASSWORD_BCRYPT, $options);
+    }
 ?>

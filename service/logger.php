@@ -1,8 +1,8 @@
 <?php
     //SELECT * FROM log_request as req join log_response as resp ON req.id=resp.request_id 
     require_once("config.php");
-    require_once("functions.php");
     require_once("database.php");
+    require_once("session.php");
     function LogRequest()
     {
         if(DEBUG_ENABLE && DEBUG_SAVE_REQUEST)
