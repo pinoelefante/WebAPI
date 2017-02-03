@@ -1,12 +1,12 @@
 <?php
     session_start();
     
-	require_once("connections.php");
-	require_once("database.php");
-    require_once("enums.php");
-    require_once("functions.php");
-	require_once("push_notifications.php");
-	require_once("session.php");
+	require_once("./service/connections.php");
+	require_once("./service/database.php");
+    require_once("./service/enums.php");
+    require_once("./service/functions.php");
+	require_once("./service/push_notifications.php");
+	require_once("./service/session.php");
     
     $action = getParameter("action", true);
     $responseCode = StatusCodes::FAIL;
@@ -43,5 +43,4 @@
             break;
     }
     sendResponse($responseCode, $responseContent);
-    
 ?>
