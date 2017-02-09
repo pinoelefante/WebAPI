@@ -63,12 +63,19 @@
     {
         if(CHECK_USER_AGENT)
         {
-            if($_SERVER['HTTP_USER_AGENT']=="PostAppClient")
+            if($_SERVER['HTTP_USER_AGENT']==CLIENT_USER_AGENT)
                 return true;
             sendResponse(StatusCodes::INVALID_CLIENT);
             exit();
         }
         return true;
+    }
+    function GetUserIP()
+    {
+        //https://www.cloudflare.com/ips/
+        //http://stackoverflow.com/questions/14985518/cloudflare-and-logging-visitor-ip-addresses-via-in-php
+        $user_ip = REVERSE_PROXY_ENABLED ? $_SERVER[REVERSE_PROXY_REMOTE_ADDRESS] : $_SERVER['REMOTE_ADDR'];
+        return $user_ip;
     }
     function sendEmail($destinatario, $oggetto, $corpo)
     {
