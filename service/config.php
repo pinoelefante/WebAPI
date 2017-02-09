@@ -16,6 +16,7 @@
 
     /* Connection options */
     define('CHECK_USER_AGENT', 0);
+    define('CLIENT_USER_AGENT','');
     define('REVERSE_PROXY_ENABLED', 0); //es: Cloudflare
     define('REVERSE_PROXY_REMOTE_ADDRESS', 'HTTP_CF_CONNECTING_IP');
 
