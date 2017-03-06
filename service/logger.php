@@ -25,7 +25,7 @@
     }
     function LogMessage($messaggio, $file = "log_error.log")
     {
-        if(DEBUG_LOG_MESSAGE)
+        if(DEBUG_ENABLE && DEBUG_LOG_MESSAGE)
         {
             $timestamp = date("d/m/Y - H:i:s");
             $line = "$timestamp: $messaggio\n";
@@ -44,13 +44,13 @@
     }
     function GetDebugMessage()
     {
-        $idUtente = getIdUtenteFromSession(false);
+        $loginParameter = getLoginParameterFromSession(false);
         $remoteAddr = $_SERVER['REMOTE_ADDR'];
         $server = GetArrayToString($_SERVER);
         $get = GetArrayToString($_GET);
         $post = GetArrayToString($_POST);
         $session = GetArrayToString($_SESSION);
-        $message = "RequestId: ".$GLOBALS['requestId']."\n<br>ID Utente: $idUtente<br>IP Address: $remoteAddr\n<br>SERVER:\n<br>$server\n<br>POST:\n<br>$post\n<br>GET:\n<br>$get\n<br>SESSION:\n<br>$session";
+        $message = "RequestId: ".$GLOBALS['requestId']."\n<br>Login parameter(default - UserID): $loginParameter<br>IP Address: $remoteAddr\n<br>SERVER:\n<br>$server\n<br>POST:\n<br>$post\n<br>GET:\n<br>$get\n<br>SESSION:\n<br>$session";
         return $message;
     }
 ?>

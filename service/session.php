@@ -1,5 +1,7 @@
 <?php
+    require_once("config.php");
     require_once("enums.php");
+    require_once("connections.php");
     
     function isLogged($required = false)
     {
@@ -11,10 +13,10 @@
         }
         return $sessionVer;
     }
-    function getIdUtenteFromSession($failIfNotLogged = true)
+    function getLoginParameterFromSession($failIfNotLogged = true)
     {
-        if(isset($_SESSION["idUtente"]))
-            return $_SESSION["idUtente"];
+        if(isset($_SESSION[LOGIN_SESSION_PARAMETER]))
+            return $_SESSION[LOGIN_SESSION_PARAMETER];
             
         if($failIfNotLogged)
         {
@@ -25,8 +27,13 @@
     }
     function sessionVerification()
     {
-        if(isset($_SESSION["idUtente"]) &&!empty($_SESSION["idUtente"]))
+        if(isset($_SESSION[LOGIN_SESSION_PARAMETER]) && !empty($_SESSION[LOGIN_SESSION_PARAMETER]))
             return true;
         return false;
+    }
+    function closeSession()
+    {
+        unset($_SESSION[LOGIN_SESSION_PARAMETER]);
+        setcookie("PHPSESSID", "", 1);
     }
 ?>

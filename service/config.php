@@ -1,4 +1,6 @@
 <?php
+    define('WEBAPI_VERSION', 1);
+    
     /* Database options */
     define('DBADDR', 'localhost');
     define('DBNAME', 'database_name');
@@ -13,6 +15,13 @@
     define('DEBUG_SAVE_REQUEST',0);
     define('DEBUG_SAVE_RESPONSE',0);
     define('DEBUG_LOG_MESSAGE',1);
+
+    /* Session/login options */
+    define('LOGIN_SESSION_PARAMETER', 'idUtente');
+    define('DB_USER_TABLE', 'users');
+    define('DB_USER_USERNAME', 'username');
+    define('DB_USER_PASSWORD', 'password');
+    define('DB_USER_ID', 'id');
 
     /* Connection options */
     define('CHECK_USER_AGENT', 0);

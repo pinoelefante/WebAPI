@@ -93,14 +93,14 @@
     }
     function RegistraDevice($token, $device, $deviceId)
 	{
-		$idUtente = getIdUtenteFromSession();
+		$loginParameter = getLoginParameterFromSession();
 		$query = "INSERT INTO push_devices (id_utente,token,deviceOS,deviceId) VALUES (?,?,?,?)";
-		return dbUpdate($query,"isis",array($idUtente,$token,$device,$deviceId)) ? StatusCodes::OK : StatusCodes::FAIL;
+		return dbUpdate($query,"isis",array($loginParameter,$token,$device,$deviceId)) ? StatusCodes::OK : StatusCodes::FAIL;
 	}
     function UnRegistraDevice($token, $device,$deviceId)
 	{
-		$idUtente = getIdUtenteFromSession();
+		$loginParameter = getLoginParameterFromSession();
 		$query = "DELETE FROM push_devices WHERE id_utente=? AND token=? AND deviceOS=? AND deviceId = ?";
-		return dbUpdate($query,"isis",array($idUtente,$token,$device,$deviceId), DatabaseReturns::RETURN_AFFECTED_ROWS) ? StatusCodes::OK : StatusCodes::FAIL;
+		return dbUpdate($query,"isis",array($loginParameter,$token,$device,$deviceId), DatabaseReturns::RETURN_AFFECTED_ROWS) ? StatusCodes::OK : StatusCodes::FAIL;
 	}
 ?>
