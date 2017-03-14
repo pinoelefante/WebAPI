@@ -6,19 +6,24 @@
     $requestId = LogRequest();
     checkUserAgent();
 
-    function getParameter($par,$required = false)
+    function getParameter($par,$required = false, $maxLenght = -1)
     {
+        $parameter = NULL;
         if(isset($_POST[$par]) && !empty($_POST[$par]))
-            return $_POST[$par];
+            $parameter = $_POST[$par];
         else if(isset($_GET[$par]) && !empty($_GET[$par]))
-            return $_GET[$par];
-        if($required)
+            $parameter = $_GET[$par];
+        if($required && $parameter == NULL)
         {
             sendResponse(StatusCodes::RICHIESTA_MALFORMATA, "$par is required");
-            $action = getParameter("action");
             die();
         }
-        return NULL;
+        if($maxLenght > 0 && $parameter!=NULL && strlen($parameter) > $maxLenght)
+        {
+            sendResponse(StatusCodes::RICHIESTA_MALFORMATA, "$par max lenght is $maxLenght");
+            die();
+        }
+        return $parameter;
     }
     function sendResponse($response, $content = "")
     {
