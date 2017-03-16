@@ -25,6 +25,17 @@
         }
         return $parameter;
     }
+    function getParametersStartingBy($startsBy)
+    {
+        $results = array();
+        $allKeys = array_merge(array_keys($_POST), array_keys($_GET));
+        foreach($allKeys as $key)
+        {
+            if(strpos($key, $startsBy) === 0)
+                $results[$key] = getParameter($key);
+        }
+        return $results;
+    }
     function sendResponse($response, $content = "")
     {
         $array = array('response' => $response, 
