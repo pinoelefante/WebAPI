@@ -25,14 +25,15 @@
         }
         return $parameter;
     }
-    function getParametersStartingBy($startsBy)
+    function getParametersStartingBy($startsBy, $required = false, $keep_startsBy = false)
     {
         $results = array();
         $allKeys = array_merge(array_keys($_POST), array_keys($_GET));
+        $substart = $keep_startsBy ? 0 : strlen($startsBy);
         foreach($allKeys as $key)
         {
             if(strpos($key, $startsBy) === 0)
-                $results[$key] = getParameter($key);
+                $results[substr($key, $substart)] = getParameter($key, $required);
         }
         return $results;
     }

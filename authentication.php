@@ -52,8 +52,8 @@
 	function login($username, $password)
 	{
 		$query = "SELECT ".DB_USER_PASSWORD.",".DB_USER_ID." FROM ".DB_USER_TABLE." WHERE ".DB_USER_USERNAME." = ?";
-        $res = dbSelect($query,"s", array(DB_USER_USERNAME));
-		if($res != null && password_verify($res[DB_USER_PASSWORD], $password))
+        $res = dbSelect($query,"s", array($username), true);
+		if($res != null && password_verify($password, $res[DB_USER_PASSWORD]))
 		{
 			$_SESSION[LOGIN_SESSION_PARAMETER] = $res[DB_USER_ID];
 			return true;
