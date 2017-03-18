@@ -9,21 +9,36 @@
     function getParameter($par,$required = false, $maxLenght = -1)
     {
         $parameter = NULL;
-        if(isset($_POST[$par]) && !empty($_POST[$par]))
-            $parameter = $_POST[$par];
-        else if(isset($_GET[$par]) && !empty($_GET[$par]))
-            $parameter = $_GET[$par];
-        if($required && $parameter == NULL)
+        if(isset($_POST[$par]))
+            $parameter = getValue($_POST,$par);
+        else if(isset($_GET[$par]))
+            $parameter = getValue($_GET,$par);
+        if($required && $parameter === NULL)
         {
             sendResponse(StatusCodes::RICHIESTA_MALFORMATA, "$par is required");
             die();
         }
-        if($maxLenght > 0 && $parameter!=NULL && strlen($parameter) > $maxLenght)
+        if($maxLenght > 0 && $parameter!==NULL && strlen($parameter) > $maxLenght)
         {
             sendResponse(StatusCodes::RICHIESTA_MALFORMATA, "$par max lenght is $maxLenght");
             die();
         }
         return $parameter;
+    }
+    function getValue($array, $key)
+    {
+        if(isset($array[$key]))
+        {
+            if(empty($array[$key]))
+            {
+                if(is_numeric($array[$key]))
+                    return 0;
+                else
+                    return NULL;
+            }
+            return $array[$key];
+        }
+        return NULL;
     }
     function getParametersStartingBy($startsBy, $required = false, $keep_startsBy = false)
     {
