@@ -23,6 +23,11 @@
         const RETURN_AFFECTED_ROWS = 2;
         const RETURN_INSERT_ID = 3;
     }
+    abstract class MapDistance extends BasicEnum
+    {
+        const METERS = 1;
+        const KILOMETERS = 1000;
+    }
     
     abstract class BasicEnum {
         private static $constCacheArray = NULL;

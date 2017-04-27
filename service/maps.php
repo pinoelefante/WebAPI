@@ -1,7 +1,8 @@
 <?php
     require_once("connections.php");
+    require_once("enums.php");
     //haversine function
-    //$earthRadius is in kilometers
+    //$earthRadius default is in kilometers
     function GetDistanceFromLatLong($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371)
     {
         $latFrom = deg2rad($latitudeFrom);
@@ -27,5 +28,11 @@
         //TODO parsing
         return sendHTTPRequest($endpoint, NULL, "GET");
     }
-    
+    function IsDistanceBetweenPointsLessThan($distance, $latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $unit = MapDistance::KILOMETERS)
+    {
+        $unit = $unit == NULL ? MapDistance::KILOMETERS : $unit;
+        $earthRadius = $unit == MapDistance::KILOMETERS ? 6371 : 6371005;
+        $dist = GetDistanceFromLatLong($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius);
+        return $dist <= $distance;
+    }
 ?>
