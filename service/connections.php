@@ -89,6 +89,7 @@
         if ($result === FALSE) 
         { 
             /* Handle error */
+            return NULL;
         }
         return $result;
     }
@@ -116,6 +117,6 @@
     }
     function sendEmailAdmin($oggetto, $corpo)
     {
-        //mail(ADMIN_EMAIL, $oggetto, $corpo);
+        sendEmail(ADMIN_EMAIL, $oggetto, $corpo);
     }
 ?>

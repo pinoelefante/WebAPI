@@ -3,7 +3,7 @@
     require_once("enums.php");
     require_once("connections.php");
     
-    function isLogged($required = false)
+    function isLogged($required = true)
     {
         $sessionVer = sessionVerification();
         if($required && !$sessionVer)

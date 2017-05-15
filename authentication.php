@@ -26,7 +26,7 @@
 			$responseCode = StatusCodes::OK;
 			break;
 		case "RegistraPush":
-			if(isLogged(true))
+			if(isLogged())
 			{
 				$token = getParameter("token", true);
 				$deviceType = getParameter("deviceOS", true);
@@ -35,7 +35,7 @@
 			}
 			break;
 		case "UnregisterPush":
-			if(isLogged(true))
+			if(isLogged())
 			{
 				$token = getParameter("token", true);
 				$deviceType = getParameter("deviceOS", true);
