@@ -12,20 +12,18 @@
     }
     function getLoginParameterFromSession($failIfNotLogged = true)
     {
-        if(isset($_SESSION[LOGIN_SESSION_PARAMETER]))
-            return $_SESSION[LOGIN_SESSION_PARAMETER];
-            
+        if(isset($GLOBALS[LOGIN_SESSION_PARAMETER]))
+            return $GLOBALS[LOGIN_SESSION_PARAMETER];
         if($failIfNotLogged)
             sendResponse(StatusCodes::LOGIN_NON_LOGGATO, "");
-        return -1; //utente non loggato
+        return -1;
     }
     function sessionVerification()
     {
-        return (isset($_SESSION[LOGIN_SESSION_PARAMETER]) && !empty($_SESSION[LOGIN_SESSION_PARAMETER]));
+        return isset($GLOBALS[LOGIN_SESSION_PARAMETER]);
     }
     function closeSession()
     {
-        unset($_SESSION[LOGIN_SESSION_PARAMETER]);
-        setcookie("PHPSESSID", "", 1);
+        unset($GLOBALS[LOGIN_SESSION_PARAMETER]);
     }
 ?>

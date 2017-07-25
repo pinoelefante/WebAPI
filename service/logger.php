@@ -1,8 +1,8 @@
 <?php
     //SELECT * FROM log_request as req join log_response as resp ON req.id=resp.request_id 
-    require_once("config.php");
+    require_once(__DIR__."/../configs/app-config.php");
     require_once("database.php");
-    require_once("session.php");
+    require_once("session_global.php");
     function LogRequest()
     {
         if(DEBUG_ENABLE && DEBUG_SAVE_REQUEST)
@@ -23,12 +23,19 @@
             dbUpdate($query,"is",array($requestId, $responseJson));
         }
     }
-    function LogMessage($messaggio, $file = "log_error.log")
+    function LogArray($array, $file = "log_array.log")
+    {
+        if(DEBUG_ENABLE)
+        {
+            LogMessage(GetArrayToString($array), $file);
+        }
+    }
+    function LogMessage($messaggio, $file = "log_error.log", $backtrace = false)
     {
         if(DEBUG_ENABLE && DEBUG_LOG_MESSAGE)
         {
             $timestamp = date("d/m/Y - H:i:s");
-            $line = "$timestamp: $messaggio\n";
+            $line = "$timestamp: $messaggio\n".($backtrace ? GetArrayToString(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS))."\n" : "");
             file_put_contents ("./logs/$file", $line, FILE_APPEND | LOCK_EX);
         }
     }
@@ -38,7 +45,7 @@
         if(!empty($array))
         {
             foreach($array as $key=>$value)
-                $content = $content."$key = $value\n";
+                $content = $content."$key".(is_array($value) ? ":\n{ ".GetArrayToString($value)."}" : " = ".$value)."\n";
         }
         return $content;
     }

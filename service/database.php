@@ -1,5 +1,5 @@
 <?php
-    require_once("config.php");
+    require_once(__DIR__."/../configs/app-config.php");
     require_once("enums.php");
     require_once("logger.php");
 
@@ -8,9 +8,8 @@
         $mysqli = new mysqli(DBADDR, DBUSER, DBPASS, DBNAME);
         if ($mysqli->connect_errno) 
         {
-            LogMessage("(".$mysqli->connect_errno.") ".$mysqli->connect_error, "mysql.log");
+            LogMessage("(".$mysqli->connect_errno.") ".$mysqli->connect_error, "mysql_connect.log");
             sendResponse(StatusCodes::SQL_FAIL);
-            exit();
         }
         $mysqli->set_charset("utf8");
         return $mysqli;
@@ -18,7 +17,7 @@
     function dbClose($mysqli)
     {
         if($mysqli->errno)
-            LogMessage("(".$mysqli->errno.") ".$mysqli->error, "mysql.log");
+            LogMessage("(".$mysqli->errno.") ".$mysqli->error, "mysql.log", true);
         $mysqli->close();
     }
     function dbUpdate($query,$parametersType = null,$parameters = null, $returnType = DatabaseReturns::RETURN_BOOLEAN)
