@@ -1,6 +1,7 @@
 <?php
-    session_start();
-    
+	/* WARNING: Account registration is not allowed in this page.
+	   Use another page for registration. (see registration.php)
+	*/
 	require_once("./configs/app-config.php");
 	require_once("./service/connections.php");
 	require_once("./service/database.php");
@@ -14,9 +15,6 @@
     $responseContent = "";
     switch($action)
     {
-		case "Register":
-			//FIXME: register can't work because connections.php require HTTPAuthentication XD
-			break;
 		case "Login":
 			if(HTTP_AUTHENTICATION_ENABLED) //if is enabled, login is already verified
 				$responseCode = StatusCodes::OK;

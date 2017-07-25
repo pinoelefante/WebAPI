@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `birth` date DEFAULT NULL,
   `email` varchar(64) DEFAULT NULL,
   `registration_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `push_devices` (
