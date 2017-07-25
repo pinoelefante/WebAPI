@@ -10,7 +10,7 @@
             $server = GetArrayToString($_SERVER);
             $get = GetArrayToString($_GET);
             $post = GetArrayToString($_POST);
-            $session = GetArrayToString($_SESSION);
+            $session = HTTP_AUTHENTICATION_ENABLED ? ("GLOBALS:\n".GetGlobalsVariables()) : GetArrayToString($_SESSION);
             $query = "INSERT INTO log_request (_SERVER,_POST,_GET,_SESSION) VALUES (?,?,?,?)";
             return dbUpdate($query,"ssss",array($server,$post,$get,$session), DatabaseReturns::RETURN_INSERT_ID);
         }
@@ -56,8 +56,17 @@
         $server = GetArrayToString($_SERVER);
         $get = GetArrayToString($_GET);
         $post = GetArrayToString($_POST);
-        $session = GetArrayToString($_SESSION);
+        $session = HTTP_AUTHENTICATION_ENABLED ? ("GLOBALS:\n".GetGlobalsVariables()) : GetArrayToString($_SESSION);
         $message = "RequestId: ".$GLOBALS['requestId']."\n<br>Login parameter(default - UserID): $loginParameter<br>IP Address: $remoteAddr\n<br>SERVER:\n<br>$server\n<br>POST:\n<br>$post\n<br>GET:\n<br>$get\n<br>SESSION:\n<br>$session";
         return $message;
+    }
+    function GetGlobalsVariables()
+    {
+        $glob = "";
+        if(isset($GLOBALS[LOGIN_SESSION_PARAMETER]))
+            $glob=$glob."UserId: ".$GLOBALS[LOGIN_SESSION_PARAMETER]."\n";
+        if(isset($_SERVER["PHP_AUTH_USER"]))
+            $glob=$glob."RequestBy: ".$_SERVER["PHP_AUTH_USER"]."\n";
+        return $glob;
     }
 ?>

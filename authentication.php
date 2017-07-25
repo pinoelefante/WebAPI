@@ -15,6 +15,7 @@
     switch($action)
     {
 		case "Register":
+			//FIXME: register can't work because connections.php require HTTPAuthentication XD
 			break;
 		case "Login":
 			if(HTTP_AUTHENTICATION_ENABLED) //if is enabled, login is already verified
@@ -25,11 +26,14 @@
 				$password = getParameter("password", true);
 				$responseCode = login($username, $password) ? StatusCodes::OK : StatusCodes::LOGIN_ERROR;	
 			}
+			//TODO: register push
 			break;
 		case "Logout":
+			//TODO: unregister push
 			closeSession();
 			$responseCode = StatusCodes::OK;
 			break;
+		/*
 		case "RegistraPush":
 			$token = getParameter("token", true);
 			$deviceType = getParameter("deviceOS", true);
@@ -42,6 +46,7 @@
 			$deviceId = getParameter("deviceId", true);
 			$responseCode = UnRegistraDevice($token, $deviceType,$deviceId);
 			break;
+		*/	
         default:
             $responseCode = StatusCodes::METODO_ASSENTE;
             break;

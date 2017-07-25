@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `log_request` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- L’esportazione dei dati non era selezionata.
+-- Lï¿½esportazione dei dati non era selezionata.
 -- Dump della struttura di tabella postapp.log_response
 CREATE TABLE IF NOT EXISTS `log_response` (
   `request_id` bigint(20) unsigned NOT NULL,
@@ -29,9 +29,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(64) DEFAULT NULL,
   `registration_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `codice_utente` (`codice_utente`),
-  KEY `FK_utente_comune` (`comune_residenza`),
-  CONSTRAINT `FK_utente_comune` FOREIGN KEY (`comune_residenza`) REFERENCES `comune` (`istat`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `push_devices` (

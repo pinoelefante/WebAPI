@@ -18,7 +18,7 @@
 
     /* Session/login options */
     define('HTTP_AUTHENTICATION_ENABLED', 1);
-    define('LOGIN_SESSION_PARAMETER', 'idUtente');
+    define('LOGIN_SESSION_PARAMETER', 'UserId');
 	define('AUTH_USER_TABLE', 'users');
     define('AUTH_USERNAME', 'username');
     define('AUTH_PASSWORD', 'password');
