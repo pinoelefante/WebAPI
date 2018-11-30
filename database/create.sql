@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `log_request` (
 CREATE TABLE IF NOT EXISTS `log_response` (
   `request_id` bigint(20) unsigned NOT NULL,
   `response` text,
+  `executionTime` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`request_id`),
   CONSTRAINT `FK_log_response_log_request` FOREIGN KEY (`request_id`) REFERENCES `log_request` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

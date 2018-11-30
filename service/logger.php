@@ -3,6 +3,9 @@
     require_once(__DIR__."/../configs/app-config.php");
     require_once("database.php");
     require_once("session_global.php");
+    
+    set_error_handler("app_error_logger");
+
     function LogRequest()
     {
         if(DEBUG_ENABLE && DEBUG_SAVE_REQUEST)
@@ -15,12 +18,12 @@
             return dbUpdate($query,"ssss",array($server,$post,$get,$session), DatabaseReturns::RETURN_INSERT_ID);
         }
     }
-    function LogResponse($responseJson, $requestId)
+    function LogResponse($responseJson, $requestId, $executionTime = 0)
     {
         if(DEBUG_ENABLE && DEBUG_SAVE_RESPONSE)
         {
-            $query = "INSERT INTO log_response (request_id,response) VALUES (?,?)";
-            dbUpdate($query,"is",array($requestId, $responseJson));
+            $query = "INSERT INTO log_response (request_id,response, executionTime) VALUES (?,?,?)";
+            dbUpdate($query,"isd",array($requestId, $responseJson,$executionTime));
         }
     }
     function LogArray($array, $file = "log_array.log")
@@ -68,5 +71,11 @@
         if(isset($_SERVER["PHP_AUTH_USER"]))
             $glob=$glob."RequestBy: ".$_SERVER["PHP_AUTH_USER"]."\n";
         return $glob;
+    }
+    function app_error_logger($errno, $errstr, $errfile, $errline)
+    {
+        $message = "[$errno] $errstr : line $errline in file $errfile";
+        LogMessage("RequestId: ".$GLOBALS['requestId']."\n\n".$message, "php_warnings.log", true);
+        return false;
     }
 ?>

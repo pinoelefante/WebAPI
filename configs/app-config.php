@@ -1,5 +1,6 @@
 <?php
     define('WEBAPI_VERSION', 1);
+    define("APP_TITLE", "WebAPI");
     
     /* Database options */
     define('DBADDR', 'localhost');
@@ -38,4 +39,7 @@
 
     /* Maps service */
     define("GOOGLEMAPS_API_KEY", "google-maps-api-key");
+	
+	/* File upload */
+	define("CHECKSUM_FILE_ENABLED", 1);
 ?>
