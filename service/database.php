@@ -89,4 +89,45 @@
         $options = array('cost' => HASH_COST_TIME);
         return password_hash($password, PASSWORD_BCRYPT, $options);
     }
+    function dbSave($obj, $ignoreColumns = null, $returnType = DatabaseReturns::RETURN_INSERT_ID, $table = null)
+    {
+        $tableName = $table == null ? get_class($obj) : $table;
+        $values = get_object_vars($obj);
+        if($ignoreColumns != null && is_array($ignoreColumns))
+            foreach ($ignoreColumns as $column)
+                unset($values[$column]);
+        $fields = implode(",", array_keys($values));
+        $bindParameters = implode(",", array_fill(0, count($values), "?"));
+        $bindValues = array_values($values);
+        $parametersTypes = __getParametersTypesString($values);
+        if(strlen($parametersTypes) != count($values))
+            throw new Exception("You can't use this method with a complex object. You have to write a complete query.");
+        
+        $query = "INSERT INTO ".$tableName. " (".$fields.") VALUES (".$bindParameters.")";
+        return dbUpdate($query, $parametersTypes, $bindValues, $returnType);
+    }
+    function __getParametersTypesString($values)
+    {
+        $types = "";
+        foreach ($values as $key => $value) {
+            $type = gettype($value);
+            switch($type)
+            {
+                case "boolean":
+                case "integer":
+                    $types.="i";
+                    break;
+                case "float":
+                case "double":
+                    $types.="d";
+                    break;
+                case "string":
+                    $types.="s";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return $types;
+    }
 ?>
